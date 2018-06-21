@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bistu.wmlove.istation.dao.ICategoryDao" >
+<resultMap id="BaseResultMap" type="bistu.wmlove.istation.entity.Category" >
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_name, password, role
+  </sql>
+  
+  <select id="getCategory" resultMap="BaseResultMap">
+    select 
+    category1, category2
+    from goods
+    group by category1, category2
+  </select>
+</mapper>

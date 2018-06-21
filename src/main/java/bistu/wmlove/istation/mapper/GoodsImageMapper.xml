@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bistu.wmlove.istation.dao.IGoodsImageDao" >
+  <resultMap id="images" type="bistu.wmlove.istation.entity.GoodsImage" >
+	<id column="id" property="id" jdbcType="INTEGER" />
+
+	<association property="goods" column="goods" select="bistu.wmlove.istation.dao.IGoodsDao.getGoods"/>
+  </resultMap>
+  
+  <select id="getGoodsImage" resultMap="images" parameterType="java.lang.String">
+    select 
+    *
+    from goods_image
+   	where item_id = #{item_id,jdbcType=VARCHAR}
+  </select>
+  
+   <insert id="create">
+		insert into goods_image values(0, #{itemId}, #{type}, #{path});
+	</insert>
+</mapper>

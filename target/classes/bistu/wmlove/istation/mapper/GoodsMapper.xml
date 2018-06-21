@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bistu.wmlove.istation.dao.IGoodsDao" >
+  <resultMap id="BaseResultMap" type="bistu.wmlove.istation.entity.Goods" >
+	<result column="item_id" property="id" jdbcType="VARCHAR" />
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="item_name" property="name" jdbcType="VARCHAR" />
+    <result column="item_salesNum" property="salesNum" jdbcType="VARCHAR" />
+    <result column="item_desc_spans" property="descPhrase" jdbcType="VARCHAR" />
+    <result column="item_price" property="price" jdbcType="VARCHAR" />
+    <result column="item_select_title" property="selected" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shop" jdbcType="VARCHAR" />
+    
+    <collection property="images" ofType="bistu.wmlove.istation.entity.GoodsImage">
+    	<result property="type" column="item_type"/>
+    	<result property="path" column="path"/>
+    </collection>
+    
+  </resultMap>
+  
+  <resultMap type="bistu.wmlove.istation.entity.Goods" id="glist">
+  	<id property="id" column="item_id"/>
+  	<collection property="images" column="item_id" select="bistu.wmlove.istation.dao.IGoodsImageDao.getGoodsImage"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    item_id, category1, category2, shop_id,item_name,item_salesNum,item_desc_spans,item_price,item_select_title
+  </sql>
+  
+  <select id="getGoods1" parameterType="java.lang.String" resultType="bistu.wmlove.istation.entity.Goods">
+  	select * from goods where item_id=#{id};
+  </select>
+  
+    <select id="getGoods" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select g.*,i.item_type,i.path, s.shop_name
+  	from goods g join goods_image i on g.item_id = i.item_id join shop s on s.shop_id = g.shop_id 
+  	where g.item_id=#{id} order by cast(g.${by} as decimal) ${order};
+  </select>
+  
+  <select id="select" resultMap="BaseResultMap">
+  	select g.*,i.item_type,i.path from (select * from goods where category2=#{category}  limit #{offset},#{limit}) g join goods_image i on g.item_id = i.item_id order by cast(g.${by} as decimal) ${order};
+  </select>
+  
+  <select id="selectName" resultMap="BaseResultMap">
+  	select g.*,i.item_type,i.path from (select * from goods where locate(#{name},item_name) > 0  limit #{offset},#{limit}) g join goods_image i on g.item_id = i.item_id order by cast(g.${by} as decimal) ${order};
+  </select>
+  
+  <select id="recommend" resultMap="BaseResultMap">
+  	select g.*,i.item_type,i.path, s.shop_name from (select * from goods where item_id in 
+  	(select distinct r.item_id from recommend r left join cart c on c.user_id = r.user_id where r.user_id = #{phone} and r.item_id not in (select item_id from cart) order by r.rate desc)
+  	 limit #{offset},#{limit}) g join goods_image i on g.item_id = i.item_id join shop s on s.shop_id = g.shop_id order by cast(g.${by} as decimal) ${order};
+  </select>
+  
+  <select id="selectShop" resultMap="BaseResultMap">
+  select g.*,i.item_type,i.path, s.shop_name from 
+  (select * from goods where shop_id = #{shopId} order by cast(${by} as decimal) ${order} limit #{offset},#{limit}) g 
+  join goods_image i on g.item_id = i.item_id join shop s on s.shop_id = g.shop_id;
+  </select>
+  
+    <insert id="create">
+		insert ignore into goods values(#{id}, #{catg1}, #{catg2}, #{shopId}, #{goodName}, #{num}, #{goodDesc}
+		,#{price}, #{select});
+	</insert>
+   
+</mapper>

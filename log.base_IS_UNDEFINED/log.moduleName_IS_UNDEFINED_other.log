@@ -1,0 +1,6 @@
+2018-04-16 18:26:29.181 DEBUG [main] org.apache.ibatis.logging.LogFactory.setImplementation():135 -Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2018-04-16 18:29:36.224 DEBUG [main] org.apache.ibatis.logging.LogFactory.setImplementation():135 -Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2018-04-16 18:30:20.227 DEBUG [main] org.apache.ibatis.logging.LogFactory.setImplementation():135 -Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2018-04-16 18:32:23.411 DEBUG [main] org.apache.ibatis.logging.LogFactory.setImplementation():135 -Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2018-04-16 18:37:09.154 DEBUG [main] org.apache.ibatis.logging.LogFactory.setImplementation():135 -Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+2018-04-16 19:11:36.817 DEBUG [main] org.apache.ibatis.logging.LogFactory.setImplementation():135 -Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bistu.wmlove.istation.dao.ICartsDao">
+    <resultMap id="BaseResultMap" type="bistu.wmlove.istation.entity.Cart">
+        <result property="shop_id" column="shop_id" />
+        <result property="shop_name" column="shop_name" />
+        <collection property="goods" ofType="bistu.wmlove.istation.entity.CartGoods">
+            <result column="item_id" property="id" jdbcType="VARCHAR" />
+            <result column="category1" property="category1" jdbcType="VARCHAR" />
+            <result column="category2" property="category2" jdbcType="VARCHAR" />
+            <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+            <result column="item_name" property="name" jdbcType="VARCHAR" />
+            <result column="item_salesNum" property="salesNum" jdbcType="VARCHAR" />
+            <result column="item_desc_spans" property="descPhrase" jdbcType="VARCHAR" />
+            <result column="item_price" property="price" jdbcType="VARCHAR" />
+            <result column="item_select_title" property="selected" jdbcType="VARCHAR" />
+
+            <result property="num" column="num" />
+            <result property="path" column="path" />
+        </collection>
+    </resultMap>
+
+    <select id="getCarts" resultMap="BaseResultMap">
+		select s.*,b.* from (select
+		a.*,i.path from
+		(select g.*,c.num from (select * from cart where
+		user_id = #{phone}) c join
+		goods g where c.item_id = g.item_id)
+		a join
+		goods_image i where a.item_id = i.item_id and i.item_type =
+		"main") b
+		join shop s where b.shop_id = s.shop_id;
+	</select>
+
+    <delete id="delete">
+        delete from cart where user_id=#{phoneid} and item_id in
+        <foreach collection="goodIDArr" item="goodid" open="(" close=")" separator=",">
+            #{goodid}
+        </foreach>
+        ;
+    </delete>
+
+    <update id="update">
+        update cart
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="num =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when item_id=#{item.goodID} and user_id=#{phoneid} then #{item.num}
+                </foreach>
+            </trim>
+        </trim>
+        where item_id in
+        <foreach collection="goodIDArr" item="goodid" open="(" close=")" separator=",">
+            #{goodid}
+        </foreach>
+    </update>
+
+    <insert id="create">
+		insert into cart values(null, #{phoneid}, #{goodid}, 1);
+	</insert>
+
+</mapper>

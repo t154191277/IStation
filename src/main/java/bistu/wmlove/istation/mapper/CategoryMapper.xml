@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bistu.wmlove.istation.dao.ICategoryDao" >
+  
+  <resultMap id="BaseResultMapNew" type="bistu.wmlove.istation.entity.Category" >
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <collection property="category2" ofType="bistu.wmlove.istation.entity.Category2">
+            <result column="category2" property="categ2" jdbcType="VARCHAR" />
+
+            <collection property="images" ofType="bistu.wmlove.istation.entity.Path">
+            	<result property="path" column="path" />
+    		</collection>
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_name, password, role
+  </sql>
+  
+  <select id="getCategoryNew" resultMap="BaseResultMapNew">
+  select b.category1, b.category2, a.path from goods_image a join 
+  (select * from goods a where #{N} > (select count(*) from goods where cast(a.item_salesNum as decimal) > cast(item_salesNum as decimal) 
+  and a.category2 = category2) group by category2,item_id order by ${by} ${order}) 
+  b on a.item_id = b.item_id where a.item_type = "main";
+  </select>
+ 
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bistu.wmlove.istation.dao.IWordCountDao" >
+  <resultMap id="BaseResultMap" type="bistu.wmlove.istation.entity.WordAndCount" >
+    <id column="text" property="text" jdbcType="VARCHAR" />
+    <result column="num" property="count" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    text, num
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wordcount
+    where text = #{text,jdbcType=VARCHAR}
+  </select>
+</mapper>
